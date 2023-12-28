@@ -24,9 +24,26 @@
         </header>
 				<form>
 					<div>
-						<label>First name</label>
-						<input />
-					</div>
+						<div>
+              <label for='firstName'>First name</label>
+              <input name='firstName' id="firstName" type='text' minlength=2 aria-required="true">
+              <span id="firstNameErr" class="formErr hidden">Please enter your first name </span>
+            </div>
+            <div>
+              <label for='lastName'>Last Name</label>
+              <input name='lastName' id="lastName" type='text' minlength=2 aria-required="true">
+              <span id="lastNameErr" class="formErr hidden">Please enter your last name </span>
+            </div>
+            <div>
+              <label for='eMail'>E-mail</label>
+              <input name='eMail' id='eMail' type='email' aria-required="true">
+              <span id="eMailErr" class="formErr hidden">Please enter valid email </span>
+            </div>
+            <div>
+              <label for='message'>Your message  </label>
+              <textarea name='message' id='message' maxlength=1000 aria-required="true"></textarea>
+              <span id="messageErr" class="formErr hidden">Please enter your message (minimum 20 characters). </span>
+            </div>
           <button class="contact_button">Send</button>
 				</form>
 			</div>
