@@ -61,7 +61,7 @@ h1 {
 
 
 
-.photographer_section article h2 {
+.photographer_section article h2  {
     color: #D3573C;
     font-size: 2em;
     font-weight: 10em;
@@ -100,4 +100,35 @@ h1 {
 }
 
 
+.photographerPortrait img {
+    height: 200px;
+    width: 200px;
+    border-radius: 50%;
+    object-fit: cover;
 
+}
+
+.photographerName {
+    color: #D3573C;
+    font-size: 2em;
+    font-weight: 10em;
+    line-height: 67px;
+
+}
+
+.photographerCity {
+
+    color: #901C1C;
+    font-weight: 400;
+    font-size: 1.5em;
+    line-height: 17px;
+}
+
+.photographerTagline {
+    color: #000000;
+    font-weight: 400;
+    font-size: 1em;
+    line-height: 13px;
+    margin-top: 5px;
+
+}

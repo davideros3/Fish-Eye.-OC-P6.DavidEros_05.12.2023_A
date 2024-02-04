@@ -9,38 +9,24 @@
   </head>
   <body>
     
+    <!-- Webpage header  -->
     <header>
-      <img src="assets/images/logo.png" class="logo" />
+      <a href="index.html" >
+        <img src="assets/images/logo.png" class="logo" aria-label="Return to the main page" alt="Logo Fish Eye " />
+      </a>  
     </header>
     
-    
+    <!-- PHotographer Dom car  -->
     <main id="main">
-      
-      <div class="photograph-header">
-        <button class="contact_button" onclick="displayModal()">Contact me</button>
-      </div>
+      <div class="sticky-popup" tabindex="-1" aria-hidden="true">
+        <div class="likes">
+          <p class="Nb_likes">0</p>
+          <i class="fa-solid fa-heart"></i>
+        </div>
     </main>
 
-    <!-- <main id="main">
-      <div class="photograph-header">
-        <div class="containerInfo"></div>
-        <div class="containerButton">
-          <button class="contact_button" onclick="displayModal()">Contactez-moi</button>
-        </div>
-        <div class="containerImg"></div>
-      </div>
-  <div class="containerFilter">
-        <label for="filtre">Filter :</label>
-        <select name="filter" id="filtre">
-          <option id="titre" value="title">Titre</option>
-          <option id="date" value="date">Date</option>
-          <option id="popular" value="likes">Popularité</option> 
-        </select>
-      </div>
-      <div class="containerMedias"></div>
-    </main> -->
     
-    
+    <!-- Modal form -->
     <div id="contact_modal">
 			<div class="modal">
 				<header>
@@ -75,6 +61,7 @@
 				</form>
 			</div>
 		</div>
+    <script src="scripts/pages/homePage.js"></script>
     <script src="scripts/pages/photographer.js"></script>
     <script src="/scripts/utils/contactForm.js"></script>
     <script src="scripts/api.js"></script>

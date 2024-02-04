@@ -20,12 +20,25 @@ async function getPhotographer(ID) {
 }
 
 // Displays the photographer's information on the page
-async function displayPhotographer(data) {
-    const main = document.getElementById('main');
-    const photographerModel = photographerFactory(data);
-    const userCardDOM = photographerModel.makeHeader();
-    main.appendChild(userCardDOM);
+// async function displayPhotographer(data) {
+//     const main = document.getElementById('main');
+//     const photographerModel = photographerFactory(data);
+//     const userCardDOM = photographerModel.makeHeader();
+//     main.appendChild(userCardDOM);
+// }
+
+
+  // Add code here to create and customize the photographer header element
+
+ async function displayPhotographer (data) {
+    const main = document.getElementById('main')
+    const photographerModel = photographerFactory(data)
+    const userCardDOM = photographerModel.makeCard()
+    main.appendChild(userCardDOM)
+    photograph-header.appendChild(userCardDOM)
+
 }
+// Add other methods and properties as needed
 
 // Displays the gallery of media items on the page
 function displayGallery(data) {
@@ -34,10 +47,16 @@ function displayGallery(data) {
     gallerySection.classList.add('gallery');
     gallerySection.setAttribute('tabindex', '0');
     gallerySection.setAttribute('aria-label', 'File Gallery');
+    const like =  document.createElement("p")
+    like.classList.add("Nb_likes")
+    like.innerHTML = ""
+    gallerySection.appendChild(like)
     main.appendChild(gallerySection);
     data.forEach((media, index) => {
-        const mediaCard = galleryFactory(media, index);
+       
+        const mediaCard = galleryFactory(media, index );
         const mediaCardDOM = mediaCard.getMediaCardDOM();
+       
         gallerySection.appendChild(mediaCardDOM);
     });
 }
@@ -57,73 +76,22 @@ async function init() {
     contactPhotographer.innerHTML = 'Contact Me  : ' + '</br>' + photographer.name;
 
     // Sort the gallery section
-    sortSection();
+   
 
     // Fetch and display the media gallery
     let mediasGallery = [];
     mediasGallery = await getMedias(photographerID);
+    console.log(mediasGallery)
     displayGallery(mediasGallery);
 
     // Manage the likes functionality
-    GestionLikes();
+   // GestionLikes();
 }
 
 // Call the init function to start the page initialization
 init();
 
-// Manages the like functionality on the page
-function GestionLikes() {
-    const likes = document.querySelectorAll('.likeIt');
-    likes.forEach(item => item.addEventListener('click', () => {
-        // Toggle the "checked" class on the like button
-        item.classList.toggle('checked');
 
-        // Update the like counts for the photographer and media item
-        const nbLikesPhotographer = document.querySelector('.likes');
-        const nbLikesMedia = item.parentElement.parentElement.firstChild;
-        let tampon1 = parseInt(nbLikesPhotographer.innerText);
-        let tampon2 = parseInt(nbLikesMedia.innerText);
-
-        if (item.classList.contains('checked')) {
-            // Increment the like counts if the like button is checked
-            tampon1++;
-            nbLikesPhotographer.innerText = tampon1++;
-            tampon2++;
-            nbLikesMedia.innerText = tampon2;
-        } else {
-            // Decrement the like counts if the like button is unchecked
-            item.removeAttribute('aria-alert');
-            tampon1--;
-            nbLikesPhotographer.innerText = tampon1;
-            tampon2--;
-            nbLikesMedia.innerText = tampon2;
-        }
-    }));
-
-    likes.forEach(item => item.addEventListener('keydown', (event) => {
-        if (e.key === 'Enter') {
-            // Same functionality as the click event, triggered by pressing Enter on the like button
-            item.classList.toggle('checked');
-
-            const nbLikesPhotographer = document.querySelector('.likes');
-            const nbLikesMedia = item.parentElement.parentElement.firstChild;
-            let tampon1 = parseInt(nbLikesPhotographer.innerText);
-            let tampon2 = parseInt(nbLikesMedia.innerText);
-
-            if (item.classList.contains('checked')) {
-                tampon1++;
-                nbLikesPhotographer.innerText = tampon1++;
-                tampon2++;
-                nbLikesMedia.innerText = tampon2;
-            } else {
-                tampon1--;
-                nbLikesPhotographer.innerText = tampon1;
-                tampon2--;
-                nbLikesMedia.innerText = tampon2;
-            }
-        }
-    }));
-}
 
 // Fetches the media items for a photographer by ID from a JSON file
 async function getMedias(ID) {
@@ -139,7 +107,7 @@ async function getMedias(ID) {
         })
        
 
-        then(function (data) {
+        .then(function (data) {
             medias = data.media.filter(media => media.photographerId == ID); // Filter media items by photographer ID
         })
         .catch(function (err) {
@@ -149,3 +117,63 @@ async function getMedias(ID) {
 
     return medias;
 }
+
+
+// Get the element with the class 'close'
+const close = document.querySelector('.close');
+
+// Get the element with the class 'lightbox_container'
+const lightbox = document.querySelector('.lightbox_container');
+
+// Add a click event listener to the 'close' element
+close.addEventListener('click', () => {
+  const pageMain = document.querySelector('main');
+  const header = document.querySelector('header');
+  
+  // Set 'aria-hidden' attribute to false for pageMain and header elements
+  pageMain.setAttribute('aria-hidden', false);
+  pageMain.setAttribute('tabindex', '0');
+  header.setAttribute('aria-hidden', false);
+  header.setAttribute('tabindex', '0');
+  
+  // Add 'hidden' class to lightbox and remove 'show' class
+  lightbox.classList.add('hidden');
+  lightbox.classList.remove('show');
+});
+
+// Keyboard navigation: Enter key for the 'close' button
+close.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    const pageMain = document.querySelector('main');
+    const header = document.querySelector('header');
+    
+    // Set 'aria-hidden' attribute to false for pageMain and header elements
+    pageMain.setAttribute('aria-hidden', false);
+    pageMain.setAttribute('tabindex', '0');
+    header.setAttribute('aria-hidden', false);
+    header.setAttribute('tabindex', '0');
+    
+    // Add 'hidden' class to lightbox and remove 'show' class
+    lightbox.classList.add('hidden');
+    lightbox.classList.remove('show');
+  }
+});
+
+// Keyboard navigation: Escape key
+window.addEventListener('keydown', (e) => {
+  // If key === 'Escape' and lightbox has 'show' class
+  if (e.key === 'Escape' && lightbox.classList.contains('show')) {
+    const pageMain = document.querySelector('main');
+    const header = document.querySelector('header');
+    
+    // Set 'aria-hidden' attribute to false for pageMain and header elements
+    pageMain.setAttribute('aria-hidden', false);
+    pageMain.setAttribute('tabindex', '0');
+    header.setAttribute('aria-hidden', false);
+    header.setAttribute('tabindex', '0');
+    
+    // Add 'hidden' class to lightbox and remove 'show' class
+    lightbox.classList.add('hidden');
+    lightbox.classList.remove('show');
+  }
+});

@@ -17,7 +17,7 @@
     height: 70px;
     border: none;
     background-color: #901C1C;
-    border-radius: 5px;
+    border-radius: 0.8em;
     cursor: pointer;
 }
 
@@ -79,3 +79,23 @@ form input {
 #message {
     height: 10em;
 }
+
+
+.sticky-popup {
+    
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        z-index: 10;
+        background-color: #DB8876;
+        color: #000;
+        width: 380px;
+        height: 50px;
+        position: fixed;
+        bottom: 0;
+        right: 15px;
+        border-radius: 5px;
+        font-weight: 500;
+        opacity: 1;
+        transition: opacity 0.3s ease-in-out;
+    }

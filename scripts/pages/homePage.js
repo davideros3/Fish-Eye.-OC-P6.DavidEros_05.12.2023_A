@@ -1,3 +1,5 @@
+
+
 function photographerFactory(data) {
     // Extract required data from the input object using destructuring
     const { name, portrait, city, country, tagline, price, id } = data;
@@ -7,7 +9,7 @@ function photographerFactory(data) {
     function createDomPhotographer() {
       // Create an anchor element for the user card
       const aTag = document.createElement('a');
-      const linkNewPage = `./photographer.html?id=${id}` + name;
+      const linkNewPage = `./photographer.html?id=${id}`;
       aTag.setAttribute('href', linkNewPage);
       aTag.setAttribute('tabindex', '0');
   
@@ -73,6 +75,27 @@ function photographerFactory(data) {
       photographerName.innerHTML = name;
       photographerCity.innerHTML = city + ', ' + country;
       photographerTagLine.innerHTML = tagline;
+      // Create a div element for the photographer's portrait
+      const photographerPortrait = document.createElement('div');
+      photographHeader.appendChild(photographerPortrait); // Append the portrait div to the photographHeader element
+      photographerPortrait.classList.add('photographerPortrait'); // Add the 'photographerPortrait' class to the div
+
+      // Create an img element for the portrait image
+      const imgPortrait = document.createElement('img');
+      imgPortrait.setAttribute('src', picture); // Set the source attribute of the image
+      imgPortrait.setAttribute('alt', 'Image of ' + name); // Set the alt attribute of the image
+      photographerPortrait.appendChild(imgPortrait); // Append the image element to the photographerPortrait div
+
+      // Create a button element for contacting the photographer
+      const contact_button = document.createElement('button');
+      photographHeader.appendChild(contact_button); // Append the button element to the photographHeader element
+      contact_button.classList.add('contact_button'); // Add the 'contact_button' class to the button
+      contact_button.setAttribute('onclick', 'displayModal()'); // Set the onclick attribute to call the 'displayModal' function
+      contact_button.setAttribute('type', 'button'); // Set the type attribute to 'button'
+      contact_button.setAttribute('role', 'button'); // Set the role attribute to 'button'
+      contact_button.setAttribute('aria-label', 'Open contact form'); // Set the aria-label attribute for accessibility
+      contact_button.innerHTML = 'Contact me'; // Set the inner HTML of the button to 'Contact me'
+
 
       
   
