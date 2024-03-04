@@ -5,9 +5,27 @@
     <meta charset="utf-8">
     <link rel="icon" type="image/png" href="assets/favicon.png">
     <link href="https://fonts.googleapis.com/css?family=DM+Sans&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://kit.fontawesome.com/e02755ea4c.js" crossorigin="anonymous"></script>
     <title>Fisheye - photographe </title>
   </head>
   <body>
+
+    <!-- Lightbox -->
+
+    <div class="lightbox_container hidden" tabindex="-1">
+      <div class="media_container">
+        <div class="close" role="button"><i class=" fa-solid fa-xmark" aria-label="Close lightbox" tabindex="0"></i>
+        </div>
+        <div class="previous"><i class="fa-solid fa-chevron-left" role="button" tabindex="0"
+            aria-label="Show previous media"></i></div>
+        <div class="media" tabindex="-1"> </div>
+        <div class="next"><i class="fa-solid fa-chevron-right" role="button" aria-label="Show next media"
+            tabindex="0"></i>
+        </div>
+        <div class="lightbox_legend"></div>
+      </div>
+    </div> 
     
     <!-- Webpage header  -->
     <header>
@@ -23,6 +41,8 @@
           <p class="Nb_likes">0</p>
           <i class="fa-solid fa-heart"></i>
         </div>
+      <div class="tarif"></div>
+      </div>  
     </main>
 
     

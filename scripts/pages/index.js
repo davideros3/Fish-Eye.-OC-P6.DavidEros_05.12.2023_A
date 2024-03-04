@@ -28,7 +28,7 @@ function displayData(photographers) {
     // Create a photographer model instance
     const photographerModel = photographerFactory(photographer)
     // Get the DOM representation of the photographer's user card
-    const userCardDOM = photographerModel.createDomPhotographer()
+    const userCardDOM = photographerModel.getUserCardDOM()
     // Append the user card to the photographers section on the webpage
     photographersSection.appendChild(userCardDOM)
   })

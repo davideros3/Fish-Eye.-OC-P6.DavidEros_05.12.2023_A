@@ -1,16 +1,16 @@
-
-// Asynchronously fetches a photographer by ID from a JSON file
 async function getPhotographer(ID) {
+    // Retrieve data of the selected photographer.
+    // Parameter: ID passed in the URL
     try {
         let photographers = [];
         const JSONFile = 'data/photographers.json';
 
-        const res = await fetch(JSONFile); // Fetch the JSON file
+        const res = await fetch(JSONFile);
         if (res.ok) {
-            const data = await res.json(); // Convert the response to JSON
-            photographers = data.photographers; // Get the array of photographers from the JSON data
+            const data = await res.json();
+            photographers = data.photographers;
 
-            const photographer = photographers.find(photographers => photographers.id == ID); // Find the photographer with the matching ID
+            const photographer = photographers.find(photographer => photographer.id == ID);
             return photographer;
         }
     } catch (err) {
@@ -19,84 +19,115 @@ async function getPhotographer(ID) {
     }
 }
 
-// Displays the photographer's information on the page
-// async function displayPhotographer(data) {
-//     const main = document.getElementById('main');
-//     const photographerModel = photographerFactory(data);
-//     const userCardDOM = photographerModel.makeHeader();
-//     main.appendChild(userCardDOM);
-// }
-
-
-  // Add code here to create and customize the photographer header element
-
- async function displayPhotographer (data) {
-    const main = document.getElementById('main')
-    const photographerModel = photographerFactory(data)
-    const userCardDOM = photographerModel.makeCard()
-    main.appendChild(userCardDOM)
-    photograph-header.appendChild(userCardDOM)
-
+function displayPhotographer(data) {
+    // Display the photographer's information on the webpage
+    const main = document.getElementById('main');
+    const photographerModel = photographerFactory(data);
+    const userCardDOM = photographerModel.makeHeader();
+    main.appendChild(userCardDOM);
 }
-// Add other methods and properties as needed
 
-// Displays the gallery of media items on the page
-function displayGallery(data) {
+async function displayGallery(data) {
+    // Display the media gallery of the photographer on the webpage
     const main = document.getElementById('main');
     const gallerySection = document.createElement('section');
     gallerySection.classList.add('gallery');
     gallerySection.setAttribute('tabindex', '0');
-    gallerySection.setAttribute('aria-label', 'File Gallery');
-    const like =  document.createElement("p")
-    like.classList.add("Nb_likes")
-    like.innerHTML = ""
-    gallerySection.appendChild(like)
+    gallerySection.setAttribute('aria-label', 'Media Gallery');
     main.appendChild(gallerySection);
     data.forEach((media, index) => {
+        // Create a media card for each media item in the gallery
        
-        const mediaCard = galleryFactory(media, index );
+        const mediaCard = galleryFactory(media, index);
         const mediaCardDOM = mediaCard.getMediaCardDOM();
-       
         gallerySection.appendChild(mediaCardDOM);
     });
 }
 
-// Initializes the page
 async function init() {
-    // Get the photographer ID from the URL parameters
-    const params = new URL(document.location).searchParams;
+    // Extract the photographer ID to process from the URL
+    const params = (new URL(document.location)).searchParams;
     const photographerID = params.get('id');
 
-    // Fetch the photographer data and display it
+    // Retrieve data of the selected photographer
     const photographer = await getPhotographer(photographerID);
+    // Generate the header for the Photographer's page
     displayPhotographer(photographer);
-
-    // Set the "Contact Me" header with the photographer's name
+    // Add the photographer's name to the contact modal header
     const contactPhotographer = document.querySelector('.modal header h2');
-    contactPhotographer.innerHTML = 'Contact Me  : ' + '</br>' + photographer.name;
+    contactPhotographer.innerHTML = 'Contact me: ' + '</br>' + photographer.name;
 
-    // Sort the gallery section
-   
+    // Sort the gallery section based on user preferences
+    sortSection();
 
-    // Fetch and display the media gallery
     let mediasGallery = [];
+    // Get the media items of the photographer's gallery
     mediasGallery = await getMedias(photographerID);
-    console.log(mediasGallery)
+    // Display the gallery on the webpage
     displayGallery(mediasGallery);
 
-    // Manage the likes functionality
-   // GestionLikes();
+    // Handle like functionality for the media items
+    handleLikes();
 }
 
-// Call the init function to start the page initialization
 init();
 
+function handleLikes() {
+    // Add event listeners to handle liking of media items
+    const likes = document.querySelectorAll('.love i');
+    likes.forEach(item => item.addEventListener('click', () => {
+        item.classList.toggle('checked');
 
+        const nbLikesPhotographer = document.querySelector('.Nb_likes');
+        const nbLikesMedia = item.parentElement.parentElement.firstChild;
+        let buffer1 = parseInt(nbLikesPhotographer.innerText);
+        let buffer2 = parseInt(nbLikesMedia.innerText);
 
-// Fetches the media items for a photographer by ID from a JSON file
+        if (item.classList.contains('checked')) {
+            // If like is checked, increment like counts
+            buffer1++;
+            nbLikesPhotographer.innerText = buffer1++;
+            buffer2++;
+            nbLikesMedia.innerText = buffer2;
+        } else {
+            // If like is unchecked, decrement like counts
+            item.removeAttribute('aria-alert');
+            buffer1--;
+            nbLikesPhotographer.innerText = buffer1;
+            buffer2--;
+            nbLikesMedia.innerText = buffer2;
+        }
+    }));
+
+    likes.forEach(item => item.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            item.classList.toggle('checked');
+
+            const nbLikesPhotographer = document.querySelector('.Nb_likes');
+            const nbLikesMedia = item.parentElement.parentElement.firstChild;
+            let buffer1 = parseInt(nbLikesPhotographer.innerText);
+            let buffer2 = parseInt(nbLikesMedia.innerText);
+
+            if (item.classList.contains('checked')) {
+                // If like is checked using Enter key, increment like counts
+                buffer1++;
+                nbLikesPhotographer.innerText = buffer1++;
+                buffer2++;
+                nbLikesMedia.innerText = buffer2;
+            } else {
+                // If like is unchecked using Enter key, decrement like counts
+                buffer1--;
+                nbLikesPhotographer.innerText = buffer1;
+                buffer2--;
+                nbLikesMedia.innerText = buffer2;
+            }
+        }
+    }));
+}
+let medias = [];
 async function getMedias(ID) {
-    medias = [];
-
+    // Retrieve the media items for the specified photographer ID
+    
     const JSONFile = 'data/photographers.json';
 
     await fetch(JSONFile)
@@ -105,75 +136,179 @@ async function getMedias(ID) {
                 return res.json();
             }
         })
-       
-
         .then(function (data) {
-            medias = data.media.filter(media => media.photographerId == ID); // Filter media items by photographer ID
+            medias= data.media.filter(media => media.photographerId == ID);
         })
         .catch(function (err) {
             console.log(err);
-            return new Error(err);
         });
 
     return medias;
 }
 
+// * ***************** Ligthbox ******************//
 
-// Get the element with the class 'close'
+// Button  close
+
 const close = document.querySelector('.close');
-
-// Get the element with the class 'lightbox_container'
 const lightbox = document.querySelector('.lightbox_container');
 
-// Add a click event listener to the 'close' element
+// Close button click event listener
 close.addEventListener('click', () => {
   const pageMain = document.querySelector('main');
   const header = document.querySelector('header');
   
-  // Set 'aria-hidden' attribute to false for pageMain and header elements
+  // Make the main content and header accessible
   pageMain.setAttribute('aria-hidden', false);
   pageMain.setAttribute('tabindex', '0');
   header.setAttribute('aria-hidden', false);
   header.setAttribute('tabindex', '0');
   
-  // Add 'hidden' class to lightbox and remove 'show' class
+  // Hide the lightbox
   lightbox.classList.add('hidden');
   lightbox.classList.remove('show');
 });
 
-// Keyboard navigation: Enter key for the 'close' button
+// Keyboard navigation for close button (if it has focus)
 close.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
     const pageMain = document.querySelector('main');
     const header = document.querySelector('header');
     
-    // Set 'aria-hidden' attribute to false for pageMain and header elements
+    // Make the main content and header accessible
     pageMain.setAttribute('aria-hidden', false);
     pageMain.setAttribute('tabindex', '0');
     header.setAttribute('aria-hidden', false);
     header.setAttribute('tabindex', '0');
     
-    // Add 'hidden' class to lightbox and remove 'show' class
+    // Hide the lightbox
     lightbox.classList.add('hidden');
     lightbox.classList.remove('show');
   }
 });
 
-// Keyboard navigation: Escape key
+// Keyboard navigation: "Escape" key
 window.addEventListener('keydown', (e) => {
-  // If key === 'Escape' and lightbox has 'show' class
+  // If key is "Escape" and the lightbox is visible
   if (e.key === 'Escape' && lightbox.classList.contains('show')) {
     const pageMain = document.querySelector('main');
     const header = document.querySelector('header');
     
-    // Set 'aria-hidden' attribute to false for pageMain and header elements
+    // Make the main content and header accessible
     pageMain.setAttribute('aria-hidden', false);
     pageMain.setAttribute('tabindex', '0');
     header.setAttribute('aria-hidden', false);
     header.setAttribute('tabindex', '0');
     
-    // Add 'hidden' class to lightbox and remove 'show' class
+    // Hide the lightbox
     lightbox.classList.add('hidden');
     lightbox.classList.remove('show');
   }
 });
+
+// Sorting 
+function sortSection() {
+    const main = document.getElementById('main');
+    const sortSection = document.createElement('section');
+    sortSection.classList.add('sort_container');
+    main.appendChild(sortSection);
+  
+    // "Sort by" list
+    const div1 = document.createElement('div');
+    sortSection.appendChild(div1);
+    const sortLabel = document.createElement('label');
+    sortLabel.setAttribute('for', 'sortBy');
+    sortLabel.innerText = 'Sort by: ';
+    div1.appendChild(sortLabel);
+    
+    // Select element for sorting criteria
+    const sortSelect = document.createElement('select');
+    sortSelect.setAttribute('name', 'sortBy');
+    sortSelect.setAttribute('id', 'sortBy');
+    sortSelect.setAttribute('aria-label', 'Primary sort');
+    sortSelect.addEventListener('change', () => {
+      sorting();
+    });
+    sortSection.appendChild(sortSelect);
+  
+    div1.appendChild(sortSelect);
+    
+    // Options for sorting criteria
+    const sortOption0 = document.createElement('option');
+    sortOption0.setAttribute('value', 'none');
+    sortOption0.innerText = 'No sorting';
+    sortSelect.appendChild(sortOption0);
+    
+    const sortOption1 = document.createElement('option');
+    sortOption1.setAttribute('value', 'likes');
+    sortOption1.innerText = 'Popularity';
+    sortSelect.appendChild(sortOption1);
+    
+    const sortOption2 = document.createElement('option');
+    sortOption2.setAttribute('value', 'date');
+    sortOption2.innerText = 'Date';
+    sortSelect.appendChild(sortOption2);
+    
+    const sortOption3 = document.createElement('option');
+    sortOption3.setAttribute('value', 'title');
+    sortOption3.innerText = 'Title';
+    sortSelect.appendChild(sortOption3);
+    
+    const sortOption4 = document.createElement('option');
+    sortOption4.setAttribute('value', 'price');
+    sortOption4.innerText = 'Price';
+    sortSelect.appendChild(sortOption4);
+
+    
+}
+
+async function sorting () {
+    const params = (new URL(document.location)).searchParams
+    const ID = params.get('id')
+    data = await getMedias(ID)
+
+    const sortBy = document.getElementById('sortBy').value
+    
+            switch (sortBy) {
+                case 'likes':
+                    data.sort((a, b) => a.likes - b.likes)
+                    break
+                case 'title':
+                    data.sort((a, b) => {
+                        if (a.title > b.title) {
+                            return 1
+                        }
+                        if (a.title < b.title) {
+                            return -1
+                        }
+                        return 0
+                    })
+                    break
+                case 'date':
+                    data.sort((a, b) => {
+                        if (a.date > b.date) {
+                            return 1
+                        }
+                        if (a.date < b.date) {
+                            return -1
+                        }
+                        return 0
+                    })
+                    break
+                case 'price':
+                    data.sort((a, b) => a.price - b.price)
+                    break
+            }
+            
+      
+    
+
+    const Nb_likes = document.querySelector('.Nb_likes')
+    Nb_likes.innerText = 0
+    const gallery = document.querySelector('.gallery')
+    gallery.remove()
+    await displayGallery(data) 
+}
+  
+
+

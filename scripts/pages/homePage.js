@@ -6,7 +6,7 @@ function photographerFactory(data) {
     // Construct the path for the photographer's portrait image
     const picture = `assets/portrait/${portrait}`;
   
-    function createDomPhotographer() {
+    function getUserCardDOM() {
       // Create an anchor element for the user card
       const aTag = document.createElement('a');
       const linkNewPage = `./photographer.html?id=${id}`;
@@ -45,7 +45,7 @@ function photographerFactory(data) {
       return aTag;
     }
   
-    function makeCard() {
+    function makeHeader() {
       // Create a section element for the photographer header
       const photographHeader = document.createElement('section');
   
@@ -114,8 +114,8 @@ function photographerFactory(data) {
       price,
       id,
       // Function properties
-      createDomPhotographer,
-      makeCard,
+      getUserCardDOM,
+      makeHeader,
     };
   }
   
